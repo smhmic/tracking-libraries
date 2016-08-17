@@ -51,7 +51,7 @@
 		    return a ? a.replace( /^[\s\xa0]+|[\s\xa0]+$/g, "" ) : ""
 	    },
 	    za = function( a ){
-		    var b    = I.createElement( "img" );
+		    var b    = document.createElement( "img" );
 		    b.width  = 1;
 		    b.height = 1;
 		    b.src    = a;
@@ -87,27 +87,27 @@
 		    a && (N( "Loading script: %s", a ),
 		     c ? (c = "",
 		    b && (g.test( b ) ? c = ' id="' + b + '"' : J( "Dropping invalid script ID: %s", b )),
-		      g.test( a ) ? I.write( "<script" + c + ' src="' + a + '">\x3c/script>' ) : J( "URL uses invalid characters. Dropping request for: %s", a )) : (c = I.createElement( "script" ),
+		      g.test( a ) ? document.write( "<script" + c + ' src="' + a + '">\x3c/script>' ) : J( "URL uses invalid characters. Dropping request for: %s", a )) : (c = document.createElement( "script" ),
 		      c.type = "text/javascript",
 		      c.async = !0,
 		      c.src = a,
 		    b && (c.id = b),
-		      a = I.getElementsByTagName( "script" )[0],
+		      a = document.getElementsByTagName( "script" )[0],
 		      a.parentNode.insertBefore( c, a )))
 	    },
 	    df = function(){
-		    return "https:" == I.location.protocol
+		    return "https:" == document.location.protocol
 	    },
 	    Wb = function(){
-		    var a = "" + I.location.hostname;
+		    var a = "" + document.location.hostname;
 		    return 0 == a.indexOf( "www." ) ? a.substring( 4 ) : a
 	    },
 	    Xb = function( a ){
-		    var b = I.referrer;
+		    var b = document.referrer;
 		    if( /^https?:\/\//i.test( b ) ){
 			    if( a )
 				    return b;
-			    a     = "//" + I.location.hostname;
+			    a     = "//" + document.location.hostname;
 			    var c = b.indexOf( a );
 			    if( 5 == c || 6 == c )
 				    if( a = b.charAt( c + a.length ),
@@ -328,7 +328,7 @@
 	}
 
 	function L( a, b ){
-		var c = Q.ga_debug;
+		var c = window.ga_debug;
 		c && c.trace && (c = [].slice.call( arguments ),
 		 c.unshift( "log" ),
 		 M.log.apply( M, c ))
@@ -606,14 +606,13 @@
 		}
 		return [a, c, "/", b]
 	};
-	var Q            = window,
-	    I            = document;
+	
 	var ld = function( a ){
-		var b = Q._gaUserPrefs;
-		if( b && b.ioo && b.ioo() || a && !0 === Q["ga-disable-" + a] )
+		var b = window._gaUserPrefs;
+		if( b && b.ioo && b.ioo() || a && !0 === window["ga-disable-" + a] )
 			return !0;
 		try {
-			var c = Q.external;
+			var c = window.external;
 			if( c && c._gaUserPrefs && "oo" == c._gaUserPrefs )
 				return !0
 		} catch( d ){}
@@ -621,7 +620,7 @@
 	};
 	var Md = function( a ){
 		    var b = [],
-		        c = I.cookie.split( ";" );
+		        c = document.cookie.split( ";" );
 		    a     = new RegExp( "^\\s*" + a + "=\\s*(.*?)\\s*$" );
 		    for( var d = 0; d < c.length; d++ ){
 			    var e = c[d].match( a );
@@ -631,7 +630,7 @@
 	    },
 	    pe = function( a, b, c, d, e, f ){
 		    ld( e ) ? (N( "Aborting cookie write: User has opted out of tracking." ),
-		     e = !1) : Wd.test( I.location.hostname ) || "/" == c && fe.test( d ) ? (N( "Aborting cookie write: Prohibited domain." ),
+		     e = !1) : Wd.test( document.location.hostname ) || "/" == c && fe.test( d ) ? (N( "Aborting cookie write: Prohibited domain." ),
 		     e = !1) : e = !0;
 		    if( !e )
 			    return !1;
@@ -640,9 +639,9 @@
 		    c        = a + "=" + b + "; path=" + c + "; ";
 		    f && (c += "expires=" + (new Date( (new Date).getTime() + f )).toGMTString() + "; ");
 		    d && "none" != d && (c += "domain=" + d + ";");
-		    d        = I.cookie;
-		    I.cookie = c;
-		    return d != I.cookie || Zb( Md( a ), b )
+		    d        = document.cookie;
+		    document.cookie = c;
+		    return d != document.cookie || Zb( Md( a ), b )
 	    },
 	    Ae = function( a ){
 		    return P( a ).replace( /\(/g, "%28" ).replace( /\)/g, "%29" )
@@ -678,7 +677,7 @@
 		    }
 	    },
 	    te = function( a, b, c ){
-		    var d = Q.XMLHttpRequest;
+		    var d = window.XMLHttpRequest;
 		    if( !d )
 			    return !1;
 		    var e                = new d;
@@ -695,7 +694,7 @@
 		    return !0
 	    },
 	    u = function( a, b, c ){
-		    return Q.navigator.sendBeacon ? Q.navigator.sendBeacon( a, b ) ? (c(),
+		    return window.navigator.sendBeacon ? window.navigator.sendBeacon( a, b ) ? (c(),
 		     !0) : !1 : !1
 	    },
 	    fc = function( a, b, c ){
@@ -710,7 +709,7 @@
 		    }
 	    };
 	var h = function( a ){
-		var b = Q.gaData = Q.gaData || {};
+		var b = window.gaData = window.gaData || {};
 		return b[a] = b[a] || {}
 	};
 	var gc = function(){
@@ -725,7 +724,7 @@
 			for( var b = 0; b < this.m.length; b++ ){
 				L( "  filter[" + b + "]: " + this.m[b] );
 				var c = a.get( this.m[b] );
-				c && t( c ) ? c.call( Q, a ) : L( "  Skipping (no function found.)" )
+				c && t( c ) ? c.call( window, a ) : L( "  Skipping (no function found.)" )
 			}
 		} catch( d ){
 			L( "Aborted execution due to exception: " + d )
@@ -748,7 +747,7 @@
 	}
 
 	function lc(){
-		var a = I.location.protocol;
+		var a = document.location.protocol;
 		if( "http:" != a && "https:" != a )
 			throw N( "Unallowed document protocol. Aborting hit." ),
 			 "abort";
@@ -756,7 +755,7 @@
 
 	function mc( a ){
 		try {
-			Q.navigator.sendBeacon ? F( 42 ) : Q.XMLHttpRequest && "withCredentials"in new Q.XMLHttpRequest && F( 40 )
+			window.navigator.sendBeacon ? F( 42 ) : window.XMLHttpRequest && "withCredentials"in new window.XMLHttpRequest && F( 40 )
 		} catch( c ){}
 		a.set( oc, cf( a ), !0 );
 		a.set( md, jc( a, md ) + 1 );
@@ -797,8 +796,8 @@
 	}
 
 	function td( a ){
-		(Q.gaData = Q.gaData || {}).expId && a.set( zd, (Q.gaData = Q.gaData || {}).expId );
-		(Q.gaData = Q.gaData || {}).expVar && a.set( Ad, (Q.gaData = Q.gaData || {}).expVar );
+		(window.gaData = window.gaData || {}).expId && a.set( zd, (window.gaData = window.gaData || {}).expId );
+		(window.gaData = window.gaData || {}).expVar && a.set( Ad, (window.gaData = window.gaData || {}).expVar );
 		var b;
 		var c = a.get( U );
 		if( c = h( c ).pending_experiments ){
@@ -816,13 +815,13 @@
 	}
 
 	function Ud(){
-		if( Q.navigator && "preview" == Q.navigator.loadPurpose )
+		if( window.navigator && "preview" == window.navigator.loadPurpose )
 			throw N( "Navigator in preview mode. Aborting hit." ),
 			 "abort";
 	}
 
 	function ve( a ){
-		var b = Q.gaDevIds;
+		var b = window.gaDevIds;
 		ga( b ) && 0 != b.length && a.set( "&did", b.join( "," ), !0 )
 	}
 
@@ -837,7 +836,7 @@
 	    be = function(){
 		    try {
 			    var a = new Uint32Array( 1 );
-			    Q.crypto.getRandomValues( a );
+			    window.crypto.getRandomValues( a );
 			    return a[0] & 2147483647
 		    } catch( b ){
 			    return ae()
@@ -967,7 +966,7 @@
 	    Ta           = W( "language", "ul" ),
 	    Ua           = W( "encoding", "de" ),
 	    Va           = W( "title", "dt", function(){
-		    return I.title || void 0
+		    return document.title || void 0
 	    } );
 	Bc( "contentGroup([0-9]+)", function( a ){
 		return new Ac( a[0], "cg" + a[1] )
@@ -1113,7 +1112,7 @@
 
 	function Qc(){
 		var a, b, c;
-		if( (c = (c = Q.navigator) ? c.plugins : null ) && c.length )
+		if( (c = (c = window.navigator) ? c.plugins : null ) && c.length )
 			for( var d = 0; d < c.length && !b; d++ ){
 				var e = c[d];
 				-1 < e.name.indexOf( "Shockwave Flash" ) && (b = e.description)
@@ -1153,14 +1152,14 @@
 			     Rc( c, Oc ),
 			     Rc( c, Pc ),
 			     b( c )) : (L( "Site speed data not available - waiting for onload" ),
-			     Ca( Q, "load", function(){
+			     Ca( window, "load", function(){
 				     Sc( a, b )
 			     }, !1 ))
 		    } else
 			    L( "Site speed data not sent - unsupported browser" )
 	    },
 	    qd = function( a ){
-		    var b = Q.performance || Q.webkitPerformance,
+		    var b = window.performance || window.webkitPerformance,
 		        b = b && b.timing;
 		    if( !b )
 			    return !1;
@@ -1178,9 +1177,9 @@
 		    return !0
 	    },
 	    rd = function( a ){
-		    if( Q.top != Q )
+		    if( window.top != window )
 			    return !1;
-		    var b = Q.external,
+		    var b = window.external,
 		        c = b && b.onloadT;
 		    b && !b.isValidLoadTime && (c = void 0);
 		    2147483648 < c && (c = void 0);
@@ -1324,7 +1323,7 @@
 	}
 
 	function ud( a, b ){
-		for( var c = new Date, d = Q.navigator, e = d.plugins || [], c = [a, d.userAgent, c.getTimezoneOffset(), c.getYear(), c.getDate(), c.getHours(), c.getMinutes() + b], d = 0; d < e.length; ++d )
+		for( var c = new Date, d = window.navigator, e = d.plugins || [], c = [a, d.userAgent, c.getTimezoneOffset(), c.getYear(), c.getDate(), c.getHours(), c.getMinutes() + b], d = 0; d < e.length; ++d )
 			c.push( e[d].description );
 		return ic( c.join( "." ) )
 	}
@@ -1368,7 +1367,7 @@
 							    d[e].setAttribute( "value", c );
 							    return
 						    }
-					    d = I.createElement( "input" );
+					    d = document.createElement( "input" );
 					    d.setAttribute( "type", "hidden" );
 					    d.setAttribute( "name", "_ga" );
 					    d.setAttribute( "value", c );
@@ -1381,7 +1380,7 @@
 	pd.prototype.U = function( a, b, c ){
 		function d( c ){
 			try {
-				c = c || Q.event;
+				c = c || window.event;
 				var d;
 				a: {
 					var f = c.target || c.srcElement;
@@ -1404,22 +1403,22 @@
 
 		var e = this;
 		this.X || (this.X = !0,
-		 Ca( I, "mousedown", d, !1 ),
-		 Ca( I, "keyup", d, !1 ));
+		 Ca( document, "mousedown", d, !1 ),
+		 Ca( document, "keyup", d, !1 ));
 		if( c ){
 			c = function( b ){
-				b = b || Q.event;
+				b = b || window.event;
 				if( (b = b.target || b.srcElement) && b.action ){
 					var c = b.action.match( je );
 					c && ne( a, c[1] ) && me( e, b )
 				}
 			};
-			for( var f = 0; f < I.forms.length; f++ )
-				Ca( I.forms[f], "submit", c )
+			for( var f = 0; f < document.forms.length; f++ )
+				Ca( document.forms[f], "submit", c )
 		}
 	};
 	function ne( a, b ){
-		if( b == I.location.hostname )
+		if( b == document.location.hostname )
 			return !1;
 		for( var c = 0; c < a.length; c++ )
 			if( a[c]instanceof RegExp ){
@@ -1524,14 +1523,14 @@
 		}
 	};
 	var He = function(){
-		var a = Q.gaGlobal = Q.gaGlobal || {};
+		var a = window.gaGlobal = window.gaGlobal || {};
 		return a.hid = a.hid || ae()
 	};
 	var Nd, Od = function( a, b, c ){
 		if( !Nd ){
 			var d;
-			d     = I.location.hash;
-			var e = Q.name,
+			d     = document.location.hash;
+			var e = window.name,
 			    f = /^#?gaso=([^&]*)/;
 			if( e = (d = (d = d && d.match( f ) || e && e.match( f )) ? d[1] : Md( "GASO" )[0] || "") && d.match( /^(?:!([-0-9a-z.]{1,40})!)?([-.\w]{10,1200})$/i ) )
 				pe( "GASO", "" + d, c, b, a, 0 ),
@@ -1654,7 +1653,7 @@
 			     Tc = !0)
 		    }
 		    c = a.get( Lb );
-		    if( c = (c = I.location[c ? "href" : "search"].match( "(?:&|#|\\?)" + P( "_ga" ).replace( /([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1" ) + "=([^&#]*)" )) && 2 == c.length ? c[1] : "" )
+		    if( c = (c = document.location[c ? "href" : "search"].match( "(?:&|#|\\?)" + P( "_ga" ).replace( /([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1" ) + "=([^&#]*)" )) && 2 == c.length ? c[1] : "" )
 			    a.get( Kb ) ? (e = c.indexOf( "." ),
 			     -1 == e ? (J( "Invalid linker parameter format: " + c ),
 			      F( 22 )) : (f = c.substring( e + 1 ),
@@ -1672,25 +1671,25 @@
 		     F( 9 ),
 		     a.data.set( R, P( b ) ));
 		    if( !a.get( R ) )
-			    if( c = (c = Q.gaGlobal && Q.gaGlobal.vid) && -1 != c.search( /^(?:utma\.)?\d+\.\d+$/ ) ? c : void 0 )
+			    if( c = (c = window.gaGlobal && window.gaGlobal.vid) && -1 != c.search( /^(?:utma\.)?\d+\.\d+$/ ) ? c : void 0 )
 				    Ga( "New visitor. Copying new clientId" ),
 				     F( 17 ),
 				     a.data.set( R, c );
 			    else {
 				    Ga( "New visitor. Generating new clientId" );
 				    F( 8 );
-				    c = Q.navigator.userAgent + (I.cookie ? I.cookie : "") + (I.referrer ? I.referrer : "");
+				    c = window.navigator.userAgent + (document.cookie ? document.cookie : "") + (document.referrer ? document.referrer : "");
 				    d = c.length;
-				    for( e = Q.history.length; 0 < e; )
+				    for( e = window.history.length; 0 < e; )
 					    c += e-- ^ d++;
 				    a.data.set( R, [ae() ^ ic( c ) & 2147483647, Math.round( (new Date).getTime() / 1E3 )].join( "." ) )
 			    }
 		    Yc( a )
 	    },
 	    wd = function( a ){
-		    var b  = Q.navigator,
-		        c  = Q.screen,
-		        d  = I.location;
+		    var b  = window.navigator,
+		        c  = window.screen,
+		        d  = document.location;
 		    a.set( Qa, Xb( a.get( Mb ) ) );
 		    if( d ){
 			    var e = d.pathname || "";
@@ -1700,17 +1699,17 @@
 		    }
 		    c && a.set( Xa, c.width + "x" + c.height );
 		    c && a.set( Wa, c.colorDepth + "-bit" );
-		    var c  = I.documentElement,
-		        f  = (e = I.body) && e.clientWidth && e.clientHeight,
+		    var c  = document.documentElement,
+		        f  = (e = document.body) && e.clientWidth && e.clientHeight,
 		        ea = [];
-		    c && c.clientWidth && c.clientHeight && ("CSS1Compat" === I.compatMode || !f) ? ea = [c.clientWidth, c.clientHeight] : f && (ea = [e.clientWidth, e.clientHeight]);
+		    c && c.clientWidth && c.clientHeight && ("CSS1Compat" === document.compatMode || !f) ? ea = [c.clientWidth, c.clientHeight] : f && (ea = [e.clientWidth, e.clientHeight]);
 		    c = 0 >= ea[0] || 0 >= ea[1] ? "" : ea.join( "x" );
 		    a.set( Ya, c );
 		    a.set( Za, Qc() );
-		    a.set( Ua, I.characterSet || I.charset );
+		    a.set( Ua, document.characterSet || document.charset );
 		    a.set( Ib, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1 );
 		    a.set( Ta, (b && (b.language || b.browserLanguage) || "").toLowerCase() );
-		    if( d && a.get( Lb ) && (b = I.location.hash) ){
+		    if( d && a.get( Lb ) && (b = document.location.hash) ){
 			    b = b.split( /[?&#]+/ );
 			    d = [];
 			    for( c = 0; c < b.length; ++c )
@@ -1757,7 +1756,7 @@
 		 z( String( c.get( T ) ), a, void 0, b, !0 ))
 	};
 	var cd = function( a ){
-		    if( "prerender" == I.visibilityState )
+		    if( "prerender" == document.visibilityState )
 			    return !1;
 		    a();
 		    return !0
@@ -1770,11 +1769,11 @@
 				        if( !b && cd( a ) ){
 					        b     = !0;
 					        var d = c,
-					            e = I;
+					            e = document;
 					        e.removeEventListener ? e.removeEventListener( "visibilitychange", d, !1 ) : e.detachEvent && e.detachEvent( "onvisibilitychange", d )
 				        }
 			        };
-			    Ca( I, "visibilitychange", c )
+			    Ca( document, "visibilitychange", c )
 		    }
 	    };
 	var qe = /^(?:(\w+)\.)?(?:(\w+):)?(\w+)$/,
@@ -1863,16 +1862,16 @@
 				    ld( String( a.get( "trackingId" ) ) ) || (d.ma = String( a.get( R ) ),
 				     d.na = Number( a.get( n ) ),
 				     a = c.palindrome ? r : q,
-				     a = (a = I.cookie.replace( /^|(; +)/g, ";" ).match( a )) ? a.sort().join( "" ).substring( 1 ) : void 0,
+				     a = (a = document.cookie.replace( /^|(; +)/g, ";" ).match( a )) ? a.sort().join( "" ).substring( 1 ) : void 0,
 				     d.oa = a);
 				    a     = d.F;
 				    c     = (new Date).getTime();
-				    Q[a]  = Q[a] || [];
+				    window[a]  = window[a] || [];
 				    c     = {
 					    "gtm.start" : c
 				    };
 				    e || (c.event = "gtm.js");
-				    Q[a].push( c );
+				    window[a].push( c );
 				    c     = w( d )
 			    }
 			    !c && Se.hasOwnProperty( b ) ? (F( 39 ),
@@ -1880,7 +1879,7 @@
 			    c ? (c && 0 <= c.indexOf( "/" ) || (c = ($b || df() ? "https:" : "http:") + "//www.google-analytics.com/plugins/ua/" + c),
 			     d = Ue( c ),
 			     a = d.protocol,
-			     c = I.location.protocol,
+			     c = document.location.protocol,
 			     ("https:" == a || a == c || ("http:" != a ? 0 : "http:" == c)) && C( d ) ? (N( "Loading resource for plugin: " + b ),
 			      Ea( d.url, void 0, e ),
 			      Te.set( b, !0 )) : O( "Error loading resource for plugin %s: Refusing to load url: %s", b, d.url )) : N( "No plugin url set for %s.", b )
@@ -1898,7 +1897,7 @@
 		    B.set( a, [] )
 	    },
 	    C = function( a ){
-		    var b = Ue( I.location.href );
+		    var b = Ue( document.location.href );
 		    if( H( a.url, "https://www.google-analytics.com/gtm/js?id=" ) )
 			    return !0;
 		    if( a.query || 0 <= a.url.indexOf( "?" ) || 0 <= a.path.indexOf( "://" ) )
@@ -1918,8 +1917,8 @@
 			    return [b, "" + c, a]
 		    }
 
-		    var c  = I.createElement( "a" );
-		    c.href = I.location.href;
+		    var c  = document.createElement( "a" );
+		    c.href = document.location.href;
 		    var d  = (c.protocol || "").toLowerCase(),
 		        e  = b( c ),
 		        f  = c.search || "",
@@ -1984,7 +1983,7 @@
 	jf.R = function( a ){
 		try {
 			if( a.s )
-				a.s.call( Q, Z.O( "t0" ) );
+				a.s.call( window, Z.O( "t0" ) );
 			else {
 				var b = a.c == Fc ? Z : Z.O( a.c );
 				if( a.D )
@@ -2055,14 +2054,14 @@
 	Z.P = function(){
 		dd( "Initializing Google Analytics." );
 		"ga" != Fc && F( 49 );
-		var a = Q[Fc];
+		var a = window[Fc];
 		if( a && 42 == a.answer )
 			J( "Tracking script already loaded. Abandoning initialization." );
 		else {
 			a && 42 != a.answer && !a.q && J( "An existing object with the name '%s' found. Unexpected results can occur because of this.", Fc );
 			Z.h      = a && a.l;
 			Z.loaded = !0;
-			var b    = Q[Fc] = Z;
+			var b    = window[Fc] = Z;
 			Y( "create", b, b.create );
 			Y( "remove", b, b.remove );
 			Y( "getByName", b, b.O, 5 );
@@ -2078,7 +2077,7 @@
 			Y( "set", b, b.set );
 			if( !df() && !$b ){
 				a: {
-					for( var b = I.getElementsByTagName( "script" ), c = 0; c < b.length && 100 > c; c++ ){
+					for( var b = document.getElementsByTagName( "script" ), c = 0; c < b.length && 100 > c; c++ ){
 						var d = b[c].src;
 						if( d && 0 == d.indexOf( "https://www.google-analytics.com/analytics" ) ){
 							F( 33 );
@@ -2094,7 +2093,7 @@
 			df() || $b || !ye() || (L( "Sending all Hits by SSL" ),
 			 F( 36 ),
 			 $b = !0);
-			(Q.gaplugins = Q.gaplugins || {}).Linker = pd;
+			(window.gaplugins = window.gaplugins || {}).Linker = pd;
 			b = pd.prototype;
 			D( "linker", pd );
 			Y( "decorate", b, b.S, 20 );
@@ -2111,7 +2110,7 @@
 			dd( "Tracker: " + a[b].get( T ) ),
 			 Ja( a[b].a ),
 			 ge();
-		a = I.cookie;
+		a = document.cookie;
 		dd( "Cookie Information" );
 		for( var a = a.split( "; " ), b = [["Name", "Domain", "Path", "Value"]], c = 0; c < a.length; c++ ){
 			var d = a[c].split( "=" ),
@@ -2124,9 +2123,9 @@
 				    ea = "/",
 				    l  = d.split( "." )[1];
 				l && (l = l.split( "-" ),
-				 f = I.location.hostname.split( "." ),
+				 f = document.location.hostname.split( "." ),
 				 f = f.slice( f.length - l[0] ).join( "." ),
-				 ea += I.location.pathname.split( "/" ).slice( 1, l[1] || 1 ).join( "/" ));
+				 ea += document.location.pathname.split( "/" ).slice( 1, l[1] || 1 ).join( "/" ));
 				b.push( [e, f, ea, d] )
 			} else
 				/^((__utmt)|(_gat))/.test( e ) && b.push( [e, "", "", d] )
@@ -2138,7 +2137,7 @@
 	Ga( "\n                         _                          _       _   _\n                        | |                        | |     | | (_)\n  __ _  ___   ___   __ _| | ___    __ _ _ __   __ _| |_   _| |_ _  ___ ___\n / _` |/ _ \\ / _ \\ / _` | |/ _ \\  / _` | '_ \\ / _` | | | | | __| |/ __/ __|\n| (_| | (_) | (_) | (_| | |  __/ | (_| | | | | (_| | | |_| | |_| | (__\\__ \\\n \\__, |\\___/ \\___/ \\__, |_|\\___|  \\__,_|_| |_|\\__,_|_|\\__, |\\__|_|\\___|___/\n  __/ |             __/ |                              __/ |\n |___/             |___/                              |___/\n" );
 	J( "Running analytics_debug.js. This script is intended for testing and debugging only." );
 	var E = Z.P,
-	    K = Q[Fc];
+	    K = window[Fc];
 	K && K.r ? E() : A( E );
 	A( function(){
 		jf.H( ["provide", "render", Aa] )
