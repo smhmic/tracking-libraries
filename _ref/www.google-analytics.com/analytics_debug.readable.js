@@ -613,9 +613,12 @@
 	 * @return [Boolean] - true if opted-out, otherwise false.
 	 */ 
 	var isUserOptedOut = function( opt_trackingId ){
-		// Check for opt-out via official GA opt-out extension for Chrome (and other browsers?).
+		// Check for opt-out via official GA opt-out extension. http://j.mp/2bfy73w
 		var prefs = window._gaUserPrefs;
-		if( prefs && prefs.ioo && prefs.ioo() || opt_trackingId && true === window["ga-disable-" + opt_trackingId] )
+		if( prefs && prefs.ioo && prefs.ioo() )
+			return true;
+		// Check for site tracking opt-out. http://j.mp/2b0s2uG
+		if( opt_trackingId && true === window["ga-disable-" + opt_trackingId] )
 			return true;
 		// Check for opt-out via browser obj model (for Firefox and IE).
 		try {
