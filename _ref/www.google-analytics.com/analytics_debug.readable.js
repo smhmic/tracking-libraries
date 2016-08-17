@@ -607,17 +607,25 @@
 		return [a, c, "/", b]
 	};
 	
-	var ld = function( a ){
-		var b = window._gaUserPrefs;
-		if( b && b.ioo && b.ioo() || a && true === window["ga-disable-" + a] )
+	/**
+	 * @function isUserOptedOut - Check if user is opted-out of tracking.
+	 * @param opt_trackingId [String] - Optional. The GA tracking id (e.g. UA-12345-1).
+	 * @return [Boolean] - true if opted-out, otherwise false.
+	 */ 
+	var isUserOptedOut = function( opt_trackingId ){
+		// Check for opt-out via official GA opt-out extension for Chrome (and other browsers?).
+		var prefs = window._gaUserPrefs;
+		if( prefs && prefs.ioo && prefs.ioo() || opt_trackingId && true === window["ga-disable-" + opt_trackingId] )
 			return true;
+		// Check for opt-out via browser obj model (for Firefox and IE).
 		try {
-			var c = window.external;
-			if( c && c._gaUserPrefs && "oo" == c._gaUserPrefs )
-				return true
-		} catch( d ){}
-		return false
+			var ext = window.external;
+			if( ext && ext._gaUserPrefs && "oo" == ext._gaUserPrefs )
+				return true;
+		} catch( ex ){}
+		return false;
 	};
+	
 	var Md = function( a ){
 		    var b = [],
 		        c = document.cookie.split( ";" );
@@ -629,7 +637,7 @@
 		    return b
 	    },
 	    pe = function( a, b, c, d, e, f ){
-		    ld( e ) ? (N( "Aborting cookie write: User has opted out of tracking." ),
+		    isUserOptedOut( e ) ? (N( "Aborting cookie write: User has opted out of tracking." ),
 		     e = false) : Wd.test( document.location.hostname ) || "/" == c && fe.test( d ) ? (N( "Aborting cookie write: Prohibited domain." ),
 		     e = false) : e = true;
 		    if( !e )
@@ -699,7 +707,7 @@
 	    },
 	    fc = function( a, b, c ){
 		    O( "Error: type=%s method=%s message=%s account=%s", arguments );
-		    if( !(1 <= 100 * Math.random() || ld( "?" )) ){
+		    if( !(1 <= 100 * Math.random() || isUserOptedOut( "?" )) ){
 			    var d = ["t=error", "_e=" + a, "_v=j44d", "sr=1"];
 			    b && d.push( "_f=" + b );
 			    c && d.push( "_m=" + P( c.substring( 0, 100 ) ) );
@@ -741,7 +749,7 @@
 	}
 
 	function kc( a ){
-		if( ld( V( a, U ) ) )
+		if( isUserOptedOut( V( a, U ) ) )
 			throw N( "User has opted out of tracking. Aborting hit." ),
 			 "abort";
 	}
@@ -1859,7 +1867,7 @@
 				     O( "Infinite loop detected. Tracker trying to load the container (%s) that created it. Ignoring require statement.", b ));
 				    var f = String( a.get( "name" ) );
 				    "t0" != f && (d.target = f);
-				    ld( String( a.get( "trackingId" ) ) ) || (d.ma = String( a.get( R ) ),
+				    isUserOptedOut( String( a.get( "trackingId" ) ) ) || (d.ma = String( a.get( R ) ),
 				     d.na = Number( a.get( n ) ),
 				     a = c.palindrome ? r : q,
 				     a = (a = document.cookie.replace( /^|(; +)/g, ";" ).match( a )) ? a.sort().join( "" ).substring( 1 ) : void 0,
